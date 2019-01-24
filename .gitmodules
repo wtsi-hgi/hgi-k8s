@@ -1,0 +1,4 @@
+[submodule "cellgeni-kubespray"]
+	path = cellgeni-kubespray
+	url = https://github.com/cellgeni/kubespray.git
+	branch = master
