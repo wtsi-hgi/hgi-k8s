@@ -20,7 +20,7 @@ get_os_env() {
   {
     # Setup virtual environment, if it doesn't exist
     if ! [[ -d ".venv" ]]; then
-      python3 -m venv .venv
+      /software/python-3.6.1/bin/python3 -m venv .venv
     fi
 
     # Start virtual environment and update requirements, if neccessary
