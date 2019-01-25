@@ -16,7 +16,7 @@ if [[ -z "${GITLAB_URL}" ]] || [[ -z "${GITLAB_TOKEN}" ]]; then
 fi
 
 # Set OS_USERNAME and OS_PASSWORD from Gitlab
-source <(
+get_os_env() {
   {
     # Setup virtual environment, if it doesn't exist
     if ! [[ -d ".venv" ]]; then
@@ -32,7 +32,8 @@ source <(
   | jq -r '"export OS_USERNAME=\"" + .ZETA_OS_USERNAME + "\"\nexport OS_PASSWORD=\"" + .ZETA_OS_PASSWORD + "\""'
 
   deactivate >/dev/null 2>&1
-)
+}
+source <(get_os_env)
 
 # Set further OpenStack API environment variables
 export OS_AUTH_URL="https://zeta.internal.sanger.ac.uk:13000/v3"
