@@ -47,3 +47,7 @@ export OS_PROJECT_DOMAIN_ID="default"
 export OS_REGION_NAME="regionOne"
 export OS_INTERFACE="public"
 export OS_IDENTITY_API_VERSION=3
+
+# Cellgeni dependency
+source /nfs/cellgeni/.cellgenirc
+source activate k8s2.5.0
