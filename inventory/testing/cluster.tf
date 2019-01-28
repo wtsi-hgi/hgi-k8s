@@ -11,7 +11,7 @@ ssh_user = "ubuntu"
 
 # 0|1 bastion nodes
 number_of_bastions = 1
-flavor_bastion = "8001" # o1.small
+flavor_bastion = "8003" # o1.large
 
 # standalone etcds
 number_of_etcd = 0
@@ -21,7 +21,7 @@ number_of_k8s_masters = 0
 number_of_k8s_masters_no_etcd = 0
 number_of_k8s_masters_no_floating_ip = 3
 number_of_k8s_masters_no_floating_ip_no_etcd = 0
-flavor_k8s_master = "8001" # o1.small
+flavor_k8s_master = "8003" # o1.large
 
 # nodes
 number_of_k8s_nodes = 0
