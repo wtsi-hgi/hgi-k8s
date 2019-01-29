@@ -1,5 +1,5 @@
 # your Kubernetes cluster name here
-cluster_name = "testing"
+cluster_name = "dev"
 
 # SSH key to use for access to nodes
 public_key_path = "~/.ssh/id_rsa.pub"
@@ -39,7 +39,7 @@ ssh_user_gfs = "ubuntu"
 flavor_gfs_node = "8002" # o1.medium
 
 # networking
-network_name = "testing"
+network_name = "dev"
 external_net = "bfd77d25-d230-436a-a85a-b28b3dbdb814"
 dns_nameservers=["172.18.255.1"]
 floatingip_pool = "public"
