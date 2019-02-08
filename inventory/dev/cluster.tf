@@ -19,18 +19,18 @@ number_of_etcd = 0
 # masters
 number_of_k8s_masters = 0
 number_of_k8s_masters_no_etcd = 0
-number_of_k8s_masters_no_floating_ip = 3
+number_of_k8s_masters_no_floating_ip = 1
 number_of_k8s_masters_no_floating_ip_no_etcd = 0
 flavor_k8s_master = "8003" # o1.large
 
 # nodes
 number_of_k8s_nodes = 0
-number_of_k8s_nodes_no_floating_ip = 4
+number_of_k8s_nodes_no_floating_ip = 7
 flavor_k8s_node = "2002" # m1.medium
 
 # GlusterFS
 # either 0 or more than one
-number_of_gfs_nodes_no_floating_ip = 2
+number_of_gfs_nodes_no_floating_ip = 0
 gfs_volume_size_in_gb = 500
 # Container Linux does not support GlusterFS
 image_gfs = "xenial-isg-docker-c52f7acc02b0c11d41b174707e4c271b16f52996"
