@@ -1,24 +1,33 @@
 proxy:
     secretToken: c65b057a6ba96ee5562f4ea7d78f949d353908f52601c50c29223dd30166ccf1
-#auth:
-#  admin:
-#    users:
-#      - mercury
-#      - ch12
-#  type: ldap
-#  ldap:
-#    server:
-#      address: ldap-ro.internal.sanger.ac.uk
-#    dn:
-#      templates:
-#        - 'uid={username},ou=people,dc=sanger,dc=ac,dc=uk'
-#    # allowedGroups:
-#    #   - 'cn=team278,ou=group,dc=sanger,dc=ac,dc=uk'
-#    #   - 'cn=teamtrynka,ou=group,dc=sanger,dc=ac,dc=uk'
-#    #   - 'cn=team218,ou=group,dc=sanger,dc=ac,dc=uk'
-#    #   - 'cn=team170,ou=group,dc=sanger,dc=ac,dc=uk'
-#    #   - 'cn=team205,ou=group,dc=sanger,dc=ac,dc=uk'
-#    #   - 'cn=team204,ou=group,dc=sanger,dc=ac,dc=uk'
+auth:
+  admin:
+    users:
+      - mercury
+      - ch12
+      - vvi
+      - cn13
+      - ad7
+  type: ldap
+  ldap:
+    server:
+      address: ldap-ro.internal.sanger.ac.uk
+      port: 389
+      ssl: False
+    dn:
+      lookup: False
+      user:
+        escape: True
+        validRegex: '^[a-z][.a-z0-9_-]*$'
+      templates:
+        - 'uid={username},ou=people,dc=sanger,dc=ac,dc=uk'
+    # allowedGroups:
+    #   - 'cn=team278,ou=group,dc=sanger,dc=ac,dc=uk'
+    #   - 'cn=teamtrynka,ou=group,dc=sanger,dc=ac,dc=uk'
+    #   - 'cn=team218,ou=group,dc=sanger,dc=ac,dc=uk'
+    #   - 'cn=team170,ou=group,dc=sanger,dc=ac,dc=uk'
+    #   - 'cn=team205,ou=group,dc=sanger,dc=ac,dc=uk'
+    #   - 'cn=team204,ou=group,dc=sanger,dc=ac,dc=uk'
 ingress:
     enabled: true
     hosts:
