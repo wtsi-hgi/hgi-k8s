@@ -45,9 +45,9 @@ singleuser:
     limit: 4
     guarantee: 2
   image:
-    name: quay.io/cellgeni/cellgeni-jupyter
-    tag: v0.4.3
-  lifecycleHooks:
-    postStart:
-      exec:
-        command: ["bash", "/poststart.sh"]
+    name: mercury/hgi-jupyter-notebook
+    tag: v0.0.1
+  # lifecycleHooks:
+  #   postStart:
+  #     exec:
+  #       command: ["bash", "/poststart.sh"]
