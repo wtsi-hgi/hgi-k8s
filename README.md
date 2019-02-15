@@ -154,9 +154,8 @@ to be configured, where `$CLUSTER` is defined appropriately (e.g.,
 `dev`):
 
 ```bash
-join -t" " -o "1.2" \
-     <(openstack port list -f value -c device_id -c id | sort) \
-     <(openstack server list --name "${CLUSTER}-.*" -f value -c ID | sort) \
+join -t" " -o "1.2" <(openstack port list -f value -c device_id -c id | sort) \
+                    <(openstack server list --name "${CLUSTER}-.*" -f value -c ID | sort) \
 | xargs -n1 openstack port set --allowed_address ip-address=10.233.0.0/18 \
                                --allowed_address ip-address=10.233.64.0/18
 ```
