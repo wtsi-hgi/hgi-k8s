@@ -162,17 +162,17 @@ Finally, before Ansible can be run, the `TERRAFORM_STATE_ROOT`
 environment variable should be set to the cluster's inventory root, say:
 
 ```bash
-export TERRAFORM_STATE_ROOT="$(pwd)/inventory/dev"
+export TERRAFORM_STATE_ROOT="$(pwd)/inventory/${CLUSTER}"
 ```
 
 To test everything is working and that Ansible can contact all your
 cluster's hosts, run the following from the `cellgeni-kubespray`
 directory:
 
-    ansible -i ../inventory/dev/hosts -m ping all
+    ansible -i ../inventory/${CLUSTER}/hosts -m ping all
 
 Providing all is well, the playbook can then be run to install K8s:
 
-    ansible-playbook --become -i ../inventory/dev/hosts cluster.yml
+    ansible-playbook --become -i ../inventory/${CLUSTER}/hosts cluster.yml
 
 This will take a bit of time...
