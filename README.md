@@ -151,20 +151,12 @@ to be configured, where `$CLUSTER` is defined appropriately (e.g.,
 `dev`):
 
 ```bash
-neutron port-list -c id -c device_id \
-| grep -E $(nova list
-          | grep $CLUSTER
-          | awk '{print $2}'
-          | xargs echo
-          | tr ' ' '|') \
-| awk '{print $2}' \
-| xargs -n 1 -I XXX echo neutron port-update XXX --allowed_address_pairs list=true type=dict ip_address=10.233.0.0/18 ip_address=10.233.64.0/18 \
-| bash -eEx
+join -t" " -o "1.2" \
+     <(openstack port list -f value -c device_id -c id | sort) \
+     <(openstack server list --name "${CLUSTER}-.*" -f value -c ID | sort) \
+| xargs -n1 openstack port set --allowed_address ip-address=10.233.0.0/18 \
+                               --allowed_address ip-address=10.233.64.0/18
 ```
-
-Note that the above uses Neutron and the world has moved on. This works,
-for now -- although it's clearly magical -- but an equivalent using the
-OpenStack client may be worth developing.
 
 Finally, before Ansible can be run, the `TERRAFORM_STATE_ROOT`
 environment variable should be set to the cluster's inventory root, say:
