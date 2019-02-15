@@ -92,7 +92,8 @@ are only available within the private network.
 
 The other settings in the Terraform configuration are either
 Sanger-specific (i.e., probably won't need changing) or aren't
-used/artefacts from ~stealing~  this from Cellgeni (e.g., GlusterFS).
+used/artefacts from ~stealing~ lifting this from Cellgeni (e.g.,
+GlusterFS).
 
 First, to initialise Terraform, run the following from your cluster's
 inventory directory:
