@@ -22,7 +22,9 @@ provided by Cellgeni, to get everything up-and-running.
 
 You will need an OpenStack project/tenancy to deploy your cluster into.
 For deployment, you will need a host that can speak to OpenStack, with
-Terraform, Ansible and the OpenStack client installed.
+Terraform, Ansible and the OpenStack client installed. It's definitely
+worth setting your environment up in a `tmux` session, to avoid having
+to go through the rigmarole each time!
 
 Clone this repository:
 
