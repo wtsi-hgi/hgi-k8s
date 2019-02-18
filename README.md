@@ -246,7 +246,7 @@ and set up networking and SSH on your local machine.
 
   ```bash
   # List keys
-  ssh ubuntu@$k8s-master sudo ls /etc/kubernetes/ssl
+  ssh k8s-master sudo ls /etc/kubernetes/ssl
 
   # Get admin keys; change remote filename appropriately
   ssh k8s-master sudo cat /etc/kubernetes/ssl/admin-kube-master-1-key.pem > admin-key.pem
