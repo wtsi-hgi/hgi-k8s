@@ -295,8 +295,105 @@ See also: [Kubernetes Dashboard Overview](https://kubernetes.io/docs/tasks/acces
 
 ## Deploying Services
 
+### JupyterHub
+
+Our JupyterHub is deployed via [Helm](https://helm.sh) using the [Zero
+to JupyterHub](https://zero-to-jupyterhub.readthedocs.io/en/stable/)
+chart. The aforementioned website gives a complete overview of how to
+install and configure JupyterHub; herein follows a summary.
+
+* Install Helm on a machine that can access the K8s cluster (e.g., the
+  same one you installed `kubectl` on to). For example, on macOS, you
+  can use Homebrew:
+
+  ```bash
+  brew install kubernetes-helm
+  ```
+
+* Install Helm on to the K8s cluster:
+
+  ```bash
+  kubectl --namespace kube-system create serviceaccount tiller
+  kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+  helm init --service-account tiller
+  kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+  ```
+
+  Note that if Helm is already installed on the cluster, you will just
+  need to run `helm init --client-only` on the client machine.
+
+* Add JupyterHub to Helm:
+
+  ```bash
+  helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+  helm repo update
+  ```
+
+* JupyterHub needs its own persistent storage, to manage its state. To
+  this end, we create a new cinder storage class, per the definition in
+  Cellgeni's Kubespray repo:
+
+  ```bash
+  kubectl create -f cellgeni-kubespray/sanger/storage/sc-rw-once.yaml
+  ```
+
+* Start or upgrade JupyterHub, in the `jpt` namespace, with the
+  following:
+
+  ```bash
+  helm upgrade --install jpt jupyterhub/jupyterhub --namespace jpt --version 0.7.0 --values jupyter/jupyter-config.yaml
+  ```
+
+The configuration in `jupyter/jupyter-config` defines, amongst other
+things (see the aforementioned documentation for details):
+
+* Authentication: We have chosen to use LDAP authentication. Note that,
+  in spite of the documentation, a number of fields must be explicitly
+  set for the service to start. Specifically:
+
+  * `ldap.server.address`
+  * `ldap.server.port`
+  * `ldap.server.ssl`
+  * `ldap.dn.lookup`
+  * `ldap.dn.user.escape`
+  * `ldap.dn.user.validRegex`
+  * `ldap.dn.templates`
+
+  This
+  [mapping](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/a6824b7db1e4c42d7944f08510b7b1ac18b6de1a/images/hub/jupyterhub_config.py#L305-L318)
+  of these values to the [underlying authentication
+  module](https://github.com/jupyterhub/ldapauthenticator) is used, for
+  future reference.
+
+* Notebook Image: We have chosen to use our own notebook image, which is
+  derived from the official Docker image stacks for SciPy and R. The
+  repo for this can be found on GitHub as
+  [`hgi-jupyter-notebook`](https://github.com/wtsi-hgi/hgi-jupyter-notebook)
+  and is available for deployment from [Docker
+  Hub](https://hub.docker.com/r/mercury/hgi-jupyter-notebook)
+
+  This provides, as of writing, Python 3.6 and R 3.5 kernels, as well as
+  common packages. This image will probably develop with time to suite
+  our users' needs.
+
+* Resources:
+
+  * `singleuser.storage.capacity`, which defines the size of the
+    persistent volume claim used by each users' pod;
+  * `singleuser.memory.{limit,guarantee}`, which define the available
+    memory to each users' pod;
+  * `singleuser.cpu.{limit,guarantee}`, which define the available
+    compute to each users' pod.
+
+  We can use these values to easily calculate the maximum capacity of
+  our cluster, in terms of concurrent users, by dividing them into the
+  respective resources provided by the K8s worker nodes. The maximum
+  capacity, in terms of total users, can likewise be found by dividing
+  the total cluster volume quota by the prescribed PVC size.
+
 ## To Do...
 
 * [ ] Ingress controller
 * [ ] DNS setup (A record)
 * [ ] Firewall setup, to allow access through VPN
+* [ ] Internal network name resolution within K8s pods
