@@ -279,8 +279,8 @@ need to be started to use `kubectl`.
 
 ### Using the Kubernetes Dashboard
 
-Providing the SSH tunnel from the previous set is open, we can also use
-the K8s dashboard, using:
+Providing the SSH tunnel from the previous section is open, we can also
+use the K8s dashboard, using:
 
     kubectl proxy
 
@@ -370,7 +370,7 @@ things (see the aforementioned documentation for details):
   repo for this can be found on GitHub as
   [`hgi-jupyter-notebook`](https://github.com/wtsi-hgi/hgi-jupyter-notebook)
   and is available for deployment from [Docker
-  Hub](https://hub.docker.com/r/mercury/hgi-jupyter-notebook)
+  Hub](https://hub.docker.com/r/mercury/hgi-jupyter-notebook).
 
   This provides, as of writing, Python 3.6 and R 3.5 kernels, as well as
   common packages. This image will probably develop with time to suite
@@ -397,3 +397,4 @@ things (see the aforementioned documentation for details):
 * [ ] DNS setup (A record)
 * [ ] Firewall setup, to allow access through VPN
 * [ ] Internal network name resolution within K8s pods
+* [ ] Reverse proxy K8s dashboard for convenience? (n.b., Security risk)
