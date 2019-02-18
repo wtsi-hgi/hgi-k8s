@@ -257,13 +257,13 @@ and set up networking and SSH on your local machine.
 * Configure `kubectl`:
 
   ```bash
-  kubectl config set-cluster default-cluster --server=https://${MASTER_IP}:6443 --certificate-authority=ca.pem
+  kubectl config set-cluster default-cluster --server=https://127.0.0.1:16443 --certificate-authority=ca.pem
   kubectl config set-credentials default-admin --certificate-authority=ca.pem --client-key=admin-key.pem --client-certificate=admin.pem
   kubectl config set-context default-system --cluster=default-cluster --user=default-admin
   kubectl config use-context default-system
   ```
 
-  Edit `~/.kube/config` such that `clusters.cluster.server` points to
+  Ensure that `clusters.cluster.server`, in `~/.kube/config`, points to
   `https://127.0.0.1:16443`, so it can be accessed via an SSH tunnel.
 
 * Start the SSH tunnel:
@@ -291,7 +291,7 @@ However, to be able to use this, you will first need to create an admin
 user and acquire an access token, by following [these
 instructions](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user).
 
-See also: [Kubernetes Dashboard overview](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#accessing-the-dashboard-ui)
+See also: [Kubernetes Dashboard Overview](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#accessing-the-dashboard-ui)
 
 ## Deploying Services
 
