@@ -178,3 +178,9 @@ Providing all is well, the playbook can then be run to install K8s:
     ansible-playbook --become -i ../inventory/${CLUSTER}/hosts cluster.yml
 
 This will take a bit of time...
+
+## To Do...
+
+* [ ] Ingress controller
+* [ ] DNS setup (A record)
+* [ ] Firewall setup, to allow access through VPN
