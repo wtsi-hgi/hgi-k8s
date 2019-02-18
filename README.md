@@ -179,6 +179,122 @@ Providing all is well, the playbook can then be run to install K8s:
 
 This will take a bit of time...
 
+## Accessing Kubernetes
+
+To access and administer K8s from your machine, you will need to
+[install `kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+and set up networking and SSH on your local machine.
+
+* Copy the K8s cluster's SSH key to your local machine and `chmod` it
+  appropriately:
+
+  ```bash
+  scp user@host:/path/to/k8s/ssh/key ~/.ssh/k8s.key
+  chmod 600 ~/.ssh/k8s.key
+  ```
+
+* Create a K8s SSH configuration file and `include` it in your master
+  SSH configuration:
+
+  ```ssh
+  Host 10.0.0.*
+    ProxyCommand ssh -W %h:%p k8s-bastion
+    User ubuntu
+    IdentityFile ~/.ssh/k8s.key
+    ForwardX11 yes
+    ForwardAgent yes
+    ForwardX11Trusted yes
+
+  Host k8s-bastion
+    Hostname BASTION_IP
+    User ubuntu
+    IdentityFile ~/.ssh/k8s.key
+    ForwardX11 yes
+    ForwardAgent yes
+    ForwardX11Trusted yes
+
+  Host k8s-master
+    Hostname MASTER_IP
+    ProxyCommand ssh -W %h:%p k8s-bastion
+    User ubuntu
+    IdentityFile ~/.ssh/k8s.key
+
+  Host k8s-tunnel
+    Hostname BASTION_IP
+    LocalForward 16443 MASTER_IP:6443
+    IdentityFile ~/.ssh/k8s.key
+    ServerAliveInterval 5
+    ServerAliveCountMax 1
+    User ubuntu
+  ```
+
+  Where `BASTION_IP` is the floating IP address of your bastion host and
+  `MASTER_IP` is the IP address of any K8s master node within your
+  subnet.
+
+* Add a route to your K8s subnet via the bastion host, from your local
+  machine. For example, on macOS:
+
+  ```bash
+  sudo route add -net 10.0.0.0/24 ${BASTION_IP}
+  ```
+
+  *Note: You probably won't need to do this. This step is included for
+  completeness' sake.*
+
+* Get K8s certificates and keys:
+
+  ```bash
+  # List keys
+  ssh ubuntu@$k8s-master sudo ls /etc/kubernetes/ssl
+
+  # Get admin keys; change remote filename appropriately
+  ssh k8s-master sudo cat /etc/kubernetes/ssl/admin-kube-master-1-key.pem > admin-key.pem
+  ssh k8s-master sudo cat /etc/kubernetes/ssl/admin-kube-master-1.pem > admin.pem
+  ssh k8s-master sudo cat /etc/kubernetes/ssl/ca.pem > ca.pem
+  ```
+
+* Configure `kubectl`:
+
+  ```bash
+  kubectl config set-cluster default-cluster --server=https://${MASTER_IP}:6443 --certificate-authority=ca.pem
+  kubectl config set-credentials default-admin --certificate-authority=ca.pem --client-key=admin-key.pem --client-certificate=admin.pem
+  kubectl config set-context default-system --cluster=default-cluster --user=default-admin
+  kubectl config use-context default-system
+  ```
+
+  Edit `~/.kube/config` such that `clusters.cluster.server` points to
+  `https://127.0.0.1:16443`, so it can be accessed via an SSH tunnel.
+
+* Start the SSH tunnel:
+
+  ```bash
+  ssh -fN k8s-tunnel
+  ```
+
+  You may need to kick this periodically.
+
+`kubectl` should now be operational. In future, only the SSH tunnel will
+need to be started to use `kubectl`.
+
+### Using the Kubernetes Dashboard
+
+Providing the SSH tunnel from the previous set is open, we can also use
+the K8s dashboard, using:
+
+    kubectl proxy
+
+Which starts a proxy to the dashboard at
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+However, to be able to use this, you will first need to create an admin
+user and acquire an access token, by following [these
+instructions](https://github.com/kubernetes/dashboard/wiki/Creating-sample-user).
+
+See also: [Kubernetes Dashboard overview](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#accessing-the-dashboard-ui)
+
+## Deploying Services
+
 ## To Do...
 
 * [ ] Ingress controller
