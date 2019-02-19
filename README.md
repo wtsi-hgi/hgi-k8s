@@ -391,6 +391,10 @@ things (see the aforementioned documentation for details):
   capacity, in terms of total users, can likewise be found by dividing
   the total cluster volume quota by the prescribed PVC size.
 
+When JupyterHub starts, it initiates a `proxy-public` service in the
+`jpt` namespace, in K8s. This is provisioned with a floating IP, for
+external endpoints, and allows access to the service over HTTP.
+
 ## To Do...
 
 * [ ] Ingress controller
