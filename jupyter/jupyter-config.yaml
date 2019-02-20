@@ -46,7 +46,7 @@ singleuser:
     guarantee: 2
   image:
     name: mercury/hgi-jupyter-notebook
-    tag: v0.0.1
+    tag: v0.0.2
   # lifecycleHooks:
   #   postStart:
   #     exec:
