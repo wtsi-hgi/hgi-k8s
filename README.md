@@ -397,8 +397,10 @@ external endpoints, and allows access to the service over HTTP.
 
 ## To Do...
 
-* [ ] Ingress controller
+* [ ] Ingress controller, with TLS
 * [ ] DNS setup (A record)
 * [ ] Firewall setup, to allow access through VPN
 * [ ] Internal network name resolution within K8s pods
 * [ ] Reverse proxy K8s dashboard for convenience? (n.b., Security risk)
+* [ ] Move to vanilla Kubespray and patch as neccessary, to make
+      upstream updates easier to manage
